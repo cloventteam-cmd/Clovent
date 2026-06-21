@@ -1,0 +1,154 @@
+/* ── CLOVENT Terminal OS — Bloomberg Design System ───────────────────────── */
+
+:root {
+  --bg:        #060608;
+  --bg-panel:  #09090c;
+  --bg-hover:  #0f0f14;
+  --bg-input:  #060608;
+  --border:    #16161e;
+  --border-hi: #1e1e2a;
+
+  --green:     #00e53e;
+  --green-dim: #006620;
+  --amber:     #e5a000;
+  --amber-dim: #4a3300;
+  --red:       #e53030;
+  --red-dim:   #3a0808;
+  --blue:      #0099e5;
+  --cyan:      #00d4e5;
+  --purple:    #8855ff;
+
+  --text-1:  #d8d8e0;   /* primary   */
+  --text-2:  #888896;   /* secondary */
+  --text-3:  #44444e;   /* muted     */
+  --text-4:  #22222a;   /* ghost     */
+
+  --font: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --sz-xs: 9px;
+  --sz-sm: 10px;
+  --sz-md: 11px;
+  --sz-lg: 13px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+body {
+  font-family: var(--font);
+  font-size: var(--sz-md);
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
+  cursor: default;
+  user-select: none;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar          { width: 3px; height: 3px; }
+::-webkit-scrollbar-track    { background: transparent; }
+::-webkit-scrollbar-thumb    { background: var(--border-hi); }
+::-webkit-scrollbar-thumb:hover { background: #2a2a36; }
+
+/* ── Selection ─────────────────────────────────────────────────────────────── */
+::selection { background: #00e53e22; color: var(--green); }
+
+/* ── Utility classes ───────────────────────────────────────────────────────── */
+.tabnum  { font-variant-numeric: tabular-nums; }
+.upper   { text-transform: uppercase; letter-spacing: 0.08em; }
+.trunc   { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Panel header ──────────────────────────────────────────────────────────── */
+.panel-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--border);
+  height: 28px;
+  flex-shrink: 0;
+}
+.panel-hdr-title {
+  font-size: var(--sz-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.panel-hdr-count {
+  font-size: var(--sz-xs);
+  color: var(--text-3);
+}
+
+/* ── Section divider ───────────────────────────────────────────────────────── */
+.section-label {
+  padding: 4px 10px 3px;
+  font-size: var(--sz-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+/* ── Row hover ─────────────────────────────────────────────────────────────── */
+.row {
+  padding: 4px 10px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.05s;
+}
+.row:hover { background: var(--bg-hover); }
+
+/* ── Severity badges ───────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0 4px;
+  border: 1px solid;
+  vertical-align: middle;
+}
+.badge-green  { color: var(--green); border-color: var(--green-dim); }
+.badge-amber  { color: var(--amber); border-color: var(--amber-dim); }
+.badge-red    { color: var(--red);   border-color: var(--red-dim);   }
+.badge-blue   { color: var(--blue);  border-color: #003a4a;          }
+.badge-purple { color: var(--purple);border-color: #2a1a55;          }
+
+/* ── Pulse animation ───────────────────────────────────────────────────────── */
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.live-dot { animation: pulse 2s ease-in-out infinite; }
+
+/* ── Flash animation (new event row highlight) ─────────────────────────────── */
+@keyframes flash { 0%{background:#00e53e0a} 100%{background:transparent} }
+.flash { animation: flash 0.6s ease-out; }
+
+/* ── Score bar ─────────────────────────────────────────────────────────────── */
+.score-bar { font-size: 8px; letter-spacing: 1.5px; line-height: 1; }
+
+/* ── Inputs ─────────────────────────────────────────────────────────────────── */
+input, button, select {
+  font-family: var(--font);
+  font-size: var(--sz-md);
+  background: var(--bg-input);
+  color: var(--text-1);
+  border: 1px solid var(--border-hi);
+  outline: none;
+  padding: 6px 8px;
+}
+input:focus { border-color: var(--green); }
+
+/* ── Keyboard shortcut pill ─────────────────────────────────────────────────── */
+kbd {
+  font-family: var(--font);
+  font-size: 7px;
+  background: var(--border);
+  color: var(--text-3);
+  padding: 1px 4px;
+  border: 1px solid var(--border-hi);
+}

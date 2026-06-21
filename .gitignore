@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment — NEVER commit secrets
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# Build output
+dist/
+build/
+backend/dist/
+frontend/dist/
+backend/public/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test artifacts
+coverage/
+.nyc_output/
+
+# Uploads (runtime data — not source)
+backend/uploads/
+
+# Redis / PG local data
+*.rdb
+pgdata/
