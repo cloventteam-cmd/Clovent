@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
+import path from 'node:path';
 
 import authRoutes from './routes/auth';
 import contactRoutes from './routes/contacts';
@@ -90,6 +91,8 @@ export function createServer() {
   app.use('/api/predictions',   predictionRoutes);
   app.use('/api/billing',       billingRoutes);
   app.use('/api/admin',         adminRoutes);
+
+  app.use(express.static(path.resolve(__dirname, '../../public')));
 
   // ── Error handling ────────────────────────────────────────────────────────────
   app.use(notFound);

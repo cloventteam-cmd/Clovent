@@ -2,10 +2,10 @@
   "name": "clovent",
   "version": "1.0.0",
   "private": true,
-  "workspaces": ["backend", "shared"],
+  "workspaces": ["backend"],
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace=backend\"",
-    "build": "npm run build --workspace=shared && npm run build --workspace=backend",
+    "build": "npm run build --workspace=backend",
     "db:migrate": "npm run migrate --workspace=backend",
     "db:seed": "npm run seed --workspace=backend",
     "test": "npm run test --workspaces",
