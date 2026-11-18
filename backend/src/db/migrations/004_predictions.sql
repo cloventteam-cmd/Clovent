@@ -52,9 +52,9 @@ CREATE TABLE IF NOT EXISTS intent_signals (
 );
 -- Functional unique index: one match per phrase per contact per day
 CREATE UNIQUE INDEX IF NOT EXISTS uix_intent_daily
-  ON intent_signals(contact_id, signal_category, phrase_matched, (detected_at::date));
+  ON intent_signals(contact_id, signal_category, phrase_matched, ((detected_at AT TIME ZONE 'UTC')::date));
 CREATE INDEX idx_intent_contact  ON intent_signals(contact_id, signal_category, detected_at DESC);
-CREATE INDEX idx_intent_active   ON intent_signals(tenant_id, expires_at) WHERE expires_at > NOW();
+CREATE INDEX idx_intent_active   ON intent_signals(tenant_id, expires_at);
 
 -- ── Behavioral patterns (aggregated per contact for trend analysis) ───────────
 CREATE TABLE IF NOT EXISTS behavioral_patterns (

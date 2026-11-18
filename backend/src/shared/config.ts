@@ -10,8 +10,26 @@ function optional(key: string, fallback: string = ''): string {
   return process.env[key] ?? fallback;
 }
 
+const env = optional('NODE_ENV', 'development');
+const jwtSecret = env === 'production'
+  ? required('JWT_SECRET')
+  : optional('JWT_SECRET', 'dev_jwt_secret_change_in_production_min_64_chars_xxxxxxxxxxxxxxxx');
+const jwtRefreshSecret = env === 'production'
+  ? required('JWT_REFRESH_SECRET')
+  : optional('JWT_REFRESH_SECRET', 'dev_refresh_secret_change_in_prod_min_64_chars_xxxxxxxxxxxxxxx');
+
+if (env === 'production' && (
+  jwtSecret.length < 64 ||
+  jwtRefreshSecret.length < 64 ||
+  jwtSecret === jwtRefreshSecret ||
+  /^(dev_|change_me_)/.test(jwtSecret) ||
+  /^(dev_|change_me_)/.test(jwtRefreshSecret)
+)) {
+  throw new Error('Set distinct JWT_SECRET and JWT_REFRESH_SECRET values with at least 64 characters each.');
+}
+
 export const config = {
-  env: optional('NODE_ENV', 'development'),
+  env,
   port: parseInt(optional('PORT', '3000'), 10),
   isDev: optional('NODE_ENV', 'development') === 'development',
 
@@ -26,8 +44,8 @@ export const config = {
   },
 
   jwt: {
-    secret: optional('JWT_SECRET', 'dev_jwt_secret_change_in_production_min_64_chars_xxxxxxxxxxxxxxxx'),
-    refreshSecret: optional('JWT_REFRESH_SECRET', 'dev_refresh_secret_change_in_prod_min_64_chars_xxxxxxxxxxxxxxx'),
+    secret: jwtSecret,
+    refreshSecret: jwtRefreshSecret,
     expiresIn: optional('JWT_EXPIRES_IN', '15m'),
     refreshExpiresIn: optional('JWT_REFRESH_EXPIRES_IN', '7d'),
   },
