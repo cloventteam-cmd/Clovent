@@ -148,7 +148,7 @@ export async function persistIntentSignals(
       `INSERT INTO intent_signals
          (tenant_id, contact_id, signal_category, phrase_matched, weight, message_id, activity_id)
        VALUES ($1,$2,$3,$4,$5,$6,$7)
-       ON CONFLICT (contact_id, signal_category, phrase_matched, detected_at::date)
+       ON CONFLICT (contact_id, signal_category, phrase_matched, ((detected_at AT TIME ZONE 'UTC')::date))
        DO UPDATE SET weight = GREATEST(intent_signals.weight, EXCLUDED.weight)`,
       [
         tenantId, contactId, s.category, s.phrase, s.weight,

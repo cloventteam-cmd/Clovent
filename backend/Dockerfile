@@ -17,6 +17,7 @@ COPY package*.json ./
 COPY backend/package.json ./backend/
 RUN npm ci --omit=dev
 COPY --from=builder /app/backend/dist ./backend/dist
+COPY --from=builder /app/backend/src/db/migrations ./backend/dist/db/migrations
 COPY --from=builder /app/backend/public ./backend/public
 RUN mkdir -p /app/uploads
 EXPOSE 3000
