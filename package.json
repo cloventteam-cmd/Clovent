@@ -7,14 +7,15 @@
     "frontend"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev --workspace=backend\"",
+    "dev": "concurrently -k -n API,WEB \"npm run dev --workspace=@clovent/backend\" \"npm run dev --workspace=@clovent/dashboard\"",
     "build": "npm run build --workspace=@clovent/dashboard && npm run build --workspace=@clovent/backend",
     "db:migrate": "npm run migrate --workspace=backend",
     "db:seed": "npm run seed --workspace=backend",
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces",
     "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down"
+    "docker:down": "docker-compose down",
+    "dev:all": "docker compose up -d postgres redis && npm run dev"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
