@@ -1,130 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { api, setToken } from '../lib/api';
 
-interface Props { onLogin: (user: Record<string, unknown>, org: Record<string, unknown>) => void }
+interface Props {
+  onLogin: (user: Record<string, unknown>, org: Record<string, unknown>) => void;
+  onDemo: () => void;
+}
 
-export function LoginScreen({ onLogin }: Props) {
-  const [form, setForm] = useState({ slug: '', email: '', password: '' });
+type Mode = 'login' | 'signup';
+
+export function LoginScreen({ onLogin, onDemo }: Props) {
+  const [mode, setMode] = useState<Mode>('login');
+  const [form, setForm] = useState({ org_name: '', first_name: '', last_name: '', slug: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [tick, setTick] = useState(0);
-
-  // Blinking cursor effect
-  useEffect(() => {
-    const t = setInterval(() => setTick(n => n + 1), 530);
-    return () => clearInterval(t);
-  }, []);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     try {
-      const res = await api.login(form.slug, form.email, form.password);
-      setToken(res.data.access_token);
+      if (mode === 'signup') {
+        const res = await api.register({ org_name: form.org_name, first_name: form.first_name, last_name: form.last_name, email: form.email, password: form.password });
+        setToken(res.data.access_token);
+      } else {
+        const res = await api.login(form.slug, form.email, form.password);
+        setToken(res.data.access_token);
+      }
       const me = await api.me();
       onLogin(me.data.user, me.data.organization);
     } catch (err) {
-      setError((err as Error).message);
+      setToken(null);
+      setError((err as Error).message || 'Could not connect. Try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const cursor = tick % 2 === 0 ? '█' : ' ';
+  const update = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, [field]: e.target.value }));
 
-  return (
-    <div style={{
-      minHeight: '100vh', background: 'var(--bg)',
-      display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center',
-      padding: '24px',
-    }}>
-      {/* ASCII logo */}
-      <pre style={{
-        color: 'var(--green)', fontSize: '11px', lineHeight: '1.3',
-        letterSpacing: '0.05em', marginBottom: '32px', textAlign: 'center',
-        fontFamily: 'var(--font)',
-      }}>
-{`  ██████╗██╗      ██████╗ ██╗   ██╗███████╗███╗   ██╗████████╗
- ██╔════╝██║     ██╔═══██╗██║   ██║██╔════╝████╗  ██║╚══██╔══╝
- ██║     ██║     ██║   ██║██║   ██║█████╗  ██╔██╗ ██║   ██║
- ██║     ██║     ██║   ██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║
- ╚██████╗███████╗╚██████╔╝ ╚████╔╝ ███████╗██║ ╚████║   ██║
-  ╚═════╝╚══════╝ ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝`}
-      </pre>
-
-      <div style={{ color: 'var(--text-3)', fontSize: 'var(--sz-xs)', letterSpacing: '0.2em', marginBottom: '40px' }}>
-        AI REAL ESTATE OPERATING SYSTEM — v1.0
-      </div>
-
-      {/* Login form */}
-      <form onSubmit={submit} style={{
-        width: '360px',
-        background: 'var(--bg-panel)',
-        border: '1px solid var(--border-hi)',
-        padding: '24px',
-      }}>
-        <div style={{
-          color: 'var(--green)', fontSize: 'var(--sz-xs)',
-          letterSpacing: '0.15em', marginBottom: '20px',
-          display: 'flex', alignItems: 'center', gap: '6px',
-        }}>
-          <span className="live-dot">●</span> TERMINAL LOGIN {cursor}
-        </div>
-
-        {(['slug', 'email', 'password'] as const).map(field => (
-          <div key={field} style={{ marginBottom: '14px' }}>
-            <label style={{
-              display: 'block', color: 'var(--text-3)',
-              fontSize: '8px', letterSpacing: '0.12em', marginBottom: '4px',
-            }}>
-              {field === 'slug' ? 'ORGANIZATION SLUG' : field.toUpperCase()}
-            </label>
-            <input
-              type={field === 'password' ? 'password' : 'text'}
-              value={form[field]}
-              onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))}
-              required
-              placeholder={field === 'slug' ? 'my-org' : field === 'email' ? 'user@org.com' : '••••••••'}
-              style={{
-                width: '100%', display: 'block',
-                background: 'var(--bg)', border: '1px solid var(--border-hi)',
-                color: 'var(--text-1)', fontSize: 'var(--sz-md)',
-                padding: '7px 8px',
-              }}
-              onFocus={e => (e.target.style.borderColor = 'var(--green)')}
-              onBlur={e => (e.target.style.borderColor = 'var(--border-hi)')}
-            />
-          </div>
-        ))}
-
-        {error && (
-          <div style={{ color: 'var(--red)', fontSize: 'var(--sz-xs)', marginBottom: '12px' }}>
-            ⚠ {error}
-          </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: '100%',
-            background: loading ? 'var(--bg)' : 'var(--green-dim)',
-            border: `1px solid ${loading ? 'var(--border-hi)' : 'var(--green)'}`,
-            color: loading ? 'var(--text-3)' : 'var(--green)',
-            padding: '9px', cursor: loading ? 'default' : 'pointer',
-            fontSize: 'var(--sz-sm)', fontWeight: 700,
-            letterSpacing: '0.15em',
-          }}
-        >
-          {loading ? 'AUTHENTICATING...' : `→ CONNECT TO SYSTEM ${cursor}`}
-        </button>
-      </form>
-
-      <div style={{ marginTop: '24px', color: 'var(--text-4)', fontSize: '8px', letterSpacing: '0.1em' }}>
-        REAL-TIME INTELLIGENCE · SSE STREAM · TENANT ISOLATED
-      </div>
+  return <main className="auth-screen">
+    <div className="auth-glow auth-glow-one" /><div className="auth-glow auth-glow-two" />
+    <div className="auth-layout">
+      <section className="auth-brand-side">
+        <div className="brand auth-brand"><span className="brand-mark">C</span><span>clovent</span></div>
+        <div className="auth-pitch"><span className="auth-kicker">AI REAL ESTATE OPERATING SYSTEM</span><h1>See the full picture.<br/><em>Make your next move.</em></h1><p>Deals, relationships, and decisions connected in one workspace built for your business.</p><div className="auth-preview-card"><div className="preview-orb"><span /></div><div><strong>Your business, in motion</strong><small>Pipeline · relationships · intelligence</small></div><span className="preview-pulse" /></div></div>
+        <div className="auth-footnote">PRIVATE WORKSPACE · BUILT FOR REAL ESTATE</div>
+      </section>
+      <section className="auth-form-side"><div className="auth-form-wrap">
+        <div className="auth-mobile-brand brand"><span className="brand-mark">C</span><span>clovent</span></div>
+        <div className="auth-form-heading"><span className="auth-kicker">{mode === 'login' ? 'WELCOME BACK' : 'GET STARTED'}</span><h2>{mode === 'login' ? 'Sign in to Clovent' : 'Create your workspace'}</h2><p>{mode === 'login' ? 'Pick up where your business left off.' : 'Your private real estate command center starts here.'}</p></div>
+        <form className="auth-form" onSubmit={submit}>
+          {mode === 'signup' ? <>
+            <div className="form-two"><label>First name<input autoComplete="given-name" value={form.first_name} onChange={update('first_name')} required placeholder="Alex" /></label><label>Last name<input autoComplete="family-name" value={form.last_name} onChange={update('last_name')} required placeholder="Sanchez" /></label></div>
+            <label>Workspace name<input autoComplete="organization" value={form.org_name} onChange={update('org_name')} required minLength={2} placeholder="Sanchez Real Estate" /></label>
+          </> : <label>Workspace slug<input autoComplete="organization" value={form.slug} onChange={update('slug')} required placeholder="your-workspace" /><small>Use the workspace slug created when your account was set up.</small></label>}
+          <label>Email address<input type="email" autoComplete="email" value={form.email} onChange={update('email')} required placeholder="you@example.com" /></label>
+          <label>Password<input type="password" autoComplete={mode === 'login' ? 'current-password' : 'new-password'} minLength={mode === 'signup' ? 8 : undefined} value={form.password} onChange={update('password')} required placeholder={mode === 'signup' ? 'At least 8 characters' : 'Enter your password'} /></label>
+          {error && <div className="auth-error" role="alert">{error}</div>}
+          <button className="auth-submit" disabled={loading}>{loading ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}<span>→</span></button>
+        </form>
+        <div className="auth-switch">{mode === 'login' ? <>New to Clovent? <button onClick={() => { setMode('signup'); setError(''); }}>Create an account</button></> : <>Already have a workspace? <button onClick={() => { setMode('login'); setError(''); }}>Sign in</button></>}</div>
+        <button className="auth-demo-link" onClick={onDemo}><span>✦</span> Explore the demo workspace</button>
+        <div className="auth-security"><span>⌑</span> Your workspace is private and secure</div>
+      </div></section>
     </div>
-  );
+  </main>;
 }
