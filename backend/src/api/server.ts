@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
@@ -32,7 +33,18 @@ export function createServer() {
   const app = express();
 
   // ── Security ────────────────────────────────────────────────────────────────
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"], baseUri: ["'self'"], formAction: ["'self'"], frameAncestors: ["'none'"],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
+        imgSrc: ["'self'", 'data:', 'https://images.unsplash.com'],
+        objectSrc: ["'none'"], scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        connectSrc: ["'self'", 'https://fonts.googleapis.com'],
+      },
+    },
+  }));
   app.use(cors({
     origin: config.isDev ? '*' : process.env.ALLOWED_ORIGINS?.split(',') ?? [],
     credentials: true,
@@ -71,6 +83,10 @@ export function createServer() {
     windowMs: 15 * 60 * 1000, max: 20,
     message: { success: false, error: 'Too many login attempts' },
   }));
+  app.use('/api/auth/register', rateLimit({
+    windowMs: 60 * 60 * 1000, max: 5,
+    message: { success: false, error: 'Too many signup attempts. Try again later.' },
+  }));
 
   // ── Health routes (no auth, no rate limit) ────────────────────────────────────
   app.use('/health', healthRoutes);
@@ -90,6 +106,17 @@ export function createServer() {
   app.use('/api/predictions',   predictionRoutes);
   app.use('/api/billing',       billingRoutes);
   app.use('/api/admin',         adminRoutes);
+
+  // Serve the built React app and keep client-side routes on the API's origin.
+  const frontendDir = path.resolve(__dirname, '../../public');
+  app.use(express.static(frontendDir, { index: false, maxAge: config.isDev ? 0 : '1h' }));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/') || req.path.startsWith('/health') || req.path.startsWith('/webhooks')) {
+      next();
+      return;
+    }
+    res.sendFile(path.join(frontendDir, 'index.html'), err => { if (err) next(err); });
+  });
 
   // ── Error handling ────────────────────────────────────────────────────────────
   app.use(notFound);
