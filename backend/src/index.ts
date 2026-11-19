@@ -10,9 +10,13 @@ import { verifyPipelineWiring } from './events/pipeline';
 import { flushMetricsToDB } from './observability/event-metrics';
 import { flushUsageToDB } from './billing/usage-tracker';
 import { trackError } from './observability/error-tracker';
+import { migrate } from './db/migrate';
 
 async function bootstrap(): Promise<void> {
   logger.info({ env: config.env, pid: process.pid, node: process.version }, 'CLOVENT booting...');
+
+  // ── Database schema ─────────────────────────────────────────────────────────
+  await migrate();
 
   // ── Database ─────────────────────────────────────────────────────────────────
   const dbOk = await healthCheck();
