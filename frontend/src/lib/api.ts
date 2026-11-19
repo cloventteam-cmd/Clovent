@@ -1,6 +1,6 @@
 import type { AiBriefing } from '../types';
 
-const BASE = '/api';
+const BASE = (import.meta as any).env?.VITE_API_BASE_URL || '/api';
 
 let _token: string | null = localStorage.getItem('clovent_token');
 
@@ -26,6 +26,9 @@ async function req<T>(path: string, opts: RequestInit = {}): Promise<T> {
 }
 
 export const api = {
+  register: (data: { org_name: string; email: string; password: string; first_name: string; last_name: string }) =>
+    req<any>('/auth/register', { method: 'POST', body: JSON.stringify(data) }),
+
   login: (slug: string, email: string, password: string) =>
     req<any>('/auth/login', { method: 'POST', body: JSON.stringify({ slug, email, password }) }),
 
@@ -34,6 +37,8 @@ export const api = {
   contacts: (qs = '') => req<any>(`/contacts?per_page=25${qs ? '&' + qs : ''}`),
 
   pipeline: () => req<any>('/deals/pipeline'),
+
+  deals: () => req<any>('/deals?per_page=25'),
 
   dealsAtRisk: (min = 0.35) => req<any>(`/deals/at-risk?min_risk=${min}&per_page=10`),
 
