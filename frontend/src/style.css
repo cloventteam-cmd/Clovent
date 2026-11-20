@@ -13,3 +13,66 @@
 @media(max-width:1150px){.sidebar{width:190px}.main-area{margin-left:190px;width:calc(100% - 190px)}.overview-grid{grid-template-columns:minmax(0,1.2fr) minmax(320px,1fr)}.metric-card{padding:15px 13px;gap:11px}.metric-icon{width:46px;height:46px}.mini-bars{gap:3px}.hero-copy p{font-size:19px}.weather{right:17px}.sidebar .brand{padding-left:20px}}
 @media(max-width:900px){.sidebar{width:72px}.sidebar .brand{padding:0;justify-content:center}.brand>span:last-child,.nav-heading,.nav-item>span:not(.nav-icon),.sidebar-footer,.more-button>span:not(.nav-icon){display:none}.side-scroll{padding:18px 8px}.nav-group{padding-bottom:10px;margin-bottom:10px}.nav-item{justify-content:center;padding:0;margin:4px 0}.nav-icon{font-size:21px}.more-button{width:56px;margin:0 auto 12px;padding:0}.main-area{margin-left:72px;width:calc(100% - 72px);padding:0 13px 25px}.overview-grid{grid-template-columns:1fr}.forecast-panel,.action-panel{min-height:260px}.hero-card{height:220px}.weather{transform:scale(.9);transform-origin:top right}.metric-card{min-height:100px;padding:13px}.metric-text strong{font-size:24px}.mini-bars{display:none}.ask-clovent{width:min(360px,calc(100vw - 95px))}}
 @media(max-width:620px){.topbar{height:62px;gap:7px}.main-area{padding:0 9px 23px}.search-box{height:39px;padding:0 9px;gap:7px}.search-box input{font-size:12px}.search-box input::placeholder{max-width:100%;overflow:hidden}.top-actions{gap:4px}.demo-switch{height:36px;padding:0 9px;font-size:0}.demo-switch svg{width:18px;height:18px}.icon-button{width:34px}.avatar{width:32px;height:32px}.profile-caret{display:none}.hero-card{height:218px}.hero-photo{background-position:55% center}.hero-copy{left:17px;top:24px;max-width:calc(100% - 30px)}.hero-copy h1{font-size:30px}.hero-copy p{font-size:15px;max-width:220px}.hero-date{font-size:12px}.hero-eyebrow{font-size:9px;margin-bottom:12px}.weather{top:12px;right:9px;transform:scale(.72)}.weather-customize{display:none}.weather-low,.weather-copy{font-size:11px}.metric-grid{grid-template-columns:1fr;gap:8px;margin-top:9px}.metric-card{min-height:80px;align-items:center;padding:11px 14px}.metric-icon{width:45px;height:45px}.metric-text strong{font-size:22px}.metric-text>span{font-size:12px}.metric-text small{font-size:10px}.mini-bars{display:flex}.overview-grid{margin-top:9px;gap:9px}.forecast-panel{padding:14px 12px;min-height:250px}.panel h2{font-size:15px}.forecast-number{font-size:23px}.forecast-number span{display:block;margin:1px 0 0;font-size:11px}.select-pill{height:33px;padding:0 8px;gap:8px;font-size:10px}.chart-wrap{margin-top:18px;padding-left:32px}.chart-svg{height:126px}.chart-x{left:32px;font-size:10px}.chart-y{font-size:10px}.action-panel{padding:15px 12px;min-height:unset}.action-heading{gap:12px}.orb{height:55px;width:55px}.orb span{height:29px;width:29px}.action-heading h2{font-size:15px}.action-heading p{font-size:11px}.action-card,.action-empty{padding:10px;min-height:82px}.action-card h3,.action-empty h3{font-size:12px}.action-card p,.action-empty p{font-size:11px}.action-buttons{gap:7px}.primary-button,.secondary-button{height:39px;font-size:11px}.deals-panel{margin-top:9px;padding:12px 10px 0}.deals-header h2{font-size:14px}.deals-header button{font-size:10px}.demo-banner{font-size:10px;gap:5px}.demo-banner button{white-space:nowrap;font-size:10px}.dashboard-footer{font-size:8px}.ask-clovent{height:41px;right:8px;bottom:8px;width:calc(100vw - 96px);font-size:11px}.send-circle{width:26px;height:26px}.auth-layout{display:block}.auth-brand-side{display:none}.auth-form-side{min-height:100vh;padding:24px}.auth-mobile-brand{display:flex;height:auto;margin-bottom:42px;padding:0}.auth-form-heading h2{font-size:26px}.auth-form-heading p{font-size:13px}.auth-security{margin-top:25px}.section-page{padding:30px 8px}.section-page h1{font-size:32px}.section-content{padding:8px}.form-two{gap:8px}}
+
+
+/* CLOVENT MOTION VISIBLE V2 */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes cv2-enter { 0% { opacity: 0; transform: translateY(26px) scale(.985); } 72% { opacity: 1; transform: translateY(-2px) scale(1.002); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes cv2-float { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-11px) rotate(.35deg); } }
+  @keyframes cv2-photo { from { transform: scale(1.08); } to { transform: scale(1); } }
+  @keyframes cv2-orb { 0%,100% { transform: rotate(-10deg) scale(.96); filter: hue-rotate(0deg); } 50% { transform: rotate(10deg) scale(1.13); filter: hue-rotate(28deg); } }
+  @keyframes cv2-line { to { stroke-dashoffset: 0; } }
+  @keyframes cv2-glow { 0%,100% { box-shadow: 0 0 0 0 #755cff00; } 50% { box-shadow: 0 0 24px 2px #755cff30; } }
+
+  .landing-nav { animation: cv2-enter .7s cubic-bezier(.2,.8,.2,1) both; }
+  .landing-hero-copy > * { animation: cv2-enter .8s cubic-bezier(.2,.8,.2,1) both; }
+  .landing-hero-copy > :nth-child(1) { animation-delay: .08s; }
+  .landing-hero-copy > :nth-child(2) { animation-delay: .17s; }
+  .landing-hero-copy > :nth-child(3) { animation-delay: .26s; }
+  .landing-hero-copy > :nth-child(4) { animation-delay: .35s; }
+  .landing-hero-copy > :nth-child(5) { animation-delay: .44s; }
+  .landing-preview-wrap { animation: cv2-enter .9s .2s cubic-bezier(.2,.8,.2,1) both, cv2-float 6s 1.2s ease-in-out infinite; }
+  .peek-ai-callout { animation: cv2-float 4.8s 1s ease-in-out infinite, cv2-glow 4s 1.2s ease-in-out infinite; }
+  .landing-dashboard-peek { transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s ease; }
+  .landing-preview-wrap:hover .landing-dashboard-peek { transform: perspective(1000px) rotateY(-3deg) rotateX(1.3deg) translateY(-5px); box-shadow: 0 36px 100px #5145a52b; }
+  .peek-stats > div { transition: transform .35s cubic-bezier(.2,.8,.2,1), background .3s ease; }
+  .peek-stats > div:hover { z-index: 2; transform: translateY(-5px) scale(1.025); background: #f4f4ff; }
+  .landing-feature, .landing-price-card, .landing-steps > div { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .35s ease; }
+  .landing-feature:hover { transform: translateY(-10px) scale(1.012); border-color: #babaf4; box-shadow: 0 26px 55px #514a8f1e; }
+  .landing-feature:hover .feature-icon { transform: translateY(-3px) rotate(-8deg) scale(1.08); box-shadow: 0 8px 18px #625de825; }
+  .feature-icon { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
+  .landing-price-card:hover { transform: translateY(-8px); box-shadow: 0 27px 60px #514a8f20; }
+  .landing-primary { background-size: 200% 100%; transition: transform .24s ease, box-shadow .3s ease, background-position .6s ease; }
+  .landing-primary:hover { transform: translateY(-3px) scale(1.025); background-position: 100% 50%; box-shadow: 0 14px 34px #625de850; }
+  .landing-secondary, .landing-login, .landing-theme { transition: transform .22s ease, box-shadow .25s ease, background .25s ease; }
+  .landing-secondary:hover, .landing-theme:hover { transform: translateY(-3px); box-shadow: 0 10px 26px #514a8f1c; }
+  .landing-logo-mark { transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s ease; }
+  .landing-nav-pill:hover .landing-logo-mark { transform: rotate(-12deg) scale(1.12); box-shadow: 0 7px 25px #705ff462; }
+  .pipeline-progress i { transform: scaleX(0); transform-origin: left center; animation: cv2-line 1.5s .75s cubic-bezier(.2,.8,.2,1) forwards; }
+  .chart-line { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: cv2-line 2.1s .45s cubic-bezier(.2,.8,.2,1) forwards; }
+  .chart-dot { transform-box: fill-box; transform-origin: center; animation: cv2-glow 2.5s ease-in-out infinite; }
+  .orb { animation: cv2-orb 5.5s ease-in-out infinite; }
+  .hero-photo { animation: cv2-photo 1.4s cubic-bezier(.2,.7,.2,1) both; }
+  .hero-card .hero-copy > * { animation: cv2-enter .7s both; }
+  .hero-card .hero-copy > :nth-child(2) { animation-delay: .12s; }
+  .hero-card .hero-copy > :nth-child(3) { animation-delay: .2s; }
+  .hero-card .hero-copy > :nth-child(4) { animation-delay: .28s; }
+  .metric-card, .panel, .action-panel { transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .35s ease; }
+  .metric-grid > .metric-card { animation: cv2-enter .75s both; }
+  .metric-grid > .metric-card:nth-child(2) { animation-delay: .12s; }
+  .metric-grid > .metric-card:nth-child(3) { animation-delay: .24s; }
+  .metric-card:hover, .panel:hover, .action-panel:hover { transform: translateY(-7px) scale(1.008); border-color: #36c8e2; box-shadow: 0 22px 50px #0007, 0 0 26px #18c5ed19; }
+  .overview-grid > * { animation: cv2-enter .8s .25s both; }
+  .overview-grid > :nth-child(2) { animation-delay: .4s; }
+  .deals-panel { animation: cv2-enter .85s .45s both; }
+  .action-card { transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
+  .action-card:hover { transform: translateX(6px); border-color: #865aff; box-shadow: 0 8px 25px #653bdf1c; }
+  @supports (animation-timeline: view()) {
+    .landing-feature, .landing-steps > div { animation: cv2-enter linear both; animation-timeline: view(); animation-range: entry 0% entry 36%; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
